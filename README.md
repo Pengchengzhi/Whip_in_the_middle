@@ -2,4 +2,4 @@
 
 ## Log
 
-11.07 (Matton): Created a file structure to organize the code. Initiated the training code.
+* **11.07 (Matton):** Created a file structure to organize the code. Initiated the training code.
