@@ -47,5 +47,19 @@ dataset_dir = sorted(os.listdir(dataset_folder))
 class_names = [x.split('.')[0] for x in dataset_dir]
 # print(class_names)
 print(class_names[0])
-temp = search_in_dict(class_names[0], whole_dict)
-print(temp)
+
+wordnet_list = []
+imagenet_list = []
+for class_name in class_names:
+    temp = search_in_dict(class_name, whole_dict)
+    if temp[1][0] == 'n01317541': # domestic_list
+        wordnet_list.append(temp)
+        imagenet_list.append(class_name)
+
+# Now we have a domestic list
+
+print(wordnet_list[0])
+# print(imagenet_list)
+# print(len(imagenet_list))
+np.save("interested_class_in.npy", imagenet_list)
+np.save("interested_class_wn.npy", wordnet_list)
