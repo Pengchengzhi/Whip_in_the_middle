@@ -11,7 +11,7 @@ import glob
 from skimage import color
 
 
-''' Example of dataloader in the main.py
+''' Example of how to load data in the main.py
 from load_data import Imgnet_Dataset as myDataset
 from torch.utils import data
 
