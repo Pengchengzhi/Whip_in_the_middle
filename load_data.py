@@ -10,7 +10,6 @@ from PIL import Image
 import glob
 from skimage import color
 
-
 ''' Example of how to load data in the main.py
 from load_data import Imgnet_Dataset as myDataset
 from torch.utils import data
@@ -35,7 +34,7 @@ def pil_loader(path):
 class Imgnet_Dataset(data.Dataset):
     def __init__(self, root,
         shuffle = True,
-        size = 224,
+        size = 256,
         mode = 'test',
         loader = pil_loader):
 
