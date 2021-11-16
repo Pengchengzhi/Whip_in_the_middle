@@ -7,7 +7,7 @@ import numpy as np
 Ratio = 0.1          # Ratio of images used
 Fraction = 0.8          # Fraction of training dataset
 
-root = './'
+root = '/gpfs/accounts/eecs542f21_class_root/eecs542f21_class/yuchuw/extract_train_image_tar/'
 if os.path.isdir(root + 'image/'):
     shutil.rmtree(root + 'image/')
 if os.path.isdir(root + 'train/'):
@@ -23,12 +23,13 @@ os.mkdir('test')
 os.mkdir('train')
 
 #### Untar tar_small
-tarlist = os.listdir(root + 'tar_small/') 
+#tarlist = os.listdir(root + 'tar_small/')
+tarlist = np.load('interested_class_in.npy', allow_pickle=True)
 image_dir = root + 'image/'          # image dir
 
 for tarf in tarlist:
     print(tarf)
-    path = root + 'tar_small/' + str(tarf)
+    path = root + 'tar_small/' + str(tarf) +  '.tar'
     tf = tarfile.open(path)
 
     inp_path = image_dir + str(tarf) + '/'
