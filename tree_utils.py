@@ -1,5 +1,8 @@
+## Maintainer: Jingyu Song #####
+## Contact: jingyuso@umich.edu #####
+
 import numpy as np
-import anytree
+# import anytree
 import os
 # from exin.exin import find_class
 import xml.etree.ElementTree as ET
@@ -46,20 +49,25 @@ dataset_dir = sorted(os.listdir(dataset_folder))
 
 class_names = [x.split('.')[0] for x in dataset_dir]
 # print(class_names)
-print(class_names[0])
+# print(class_names[0])
+print(search_in_dict('n02110627', whole_dict))
 
 wordnet_list = []
 imagenet_list = []
 for class_name in class_names:
     temp = search_in_dict(class_name, whole_dict)
-    if temp[1][0] == 'n01317541': # domestic_list
-        wordnet_list.append(temp)
-        imagenet_list.append(class_name)
+    wordnet_list.append(temp)
+    # if temp[1][0] == 'n01317541': # domestic_list
+    #     wordnet_list.append(temp)
+    #     imagenet_list.append(class_name)
 
+print(wordnet_list)
+# print(wordnet_list[101])
+# print(wordnet_list[100])
 # Now we have a domestic list
 
-print(wordnet_list[0])
+# print(wordnet_list[0])
 # print(imagenet_list)
 # print(len(imagenet_list))
-np.save("interested_class_in.npy", imagenet_list)
-np.save("interested_class_wn.npy", wordnet_list)
+np.save("interested_class_in.npy", imagenet_list, allow_pickle=True)
+np.save("interested_class_wn.npy", wordnet_list, allow_pickle=True)
