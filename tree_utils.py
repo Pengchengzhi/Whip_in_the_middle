@@ -50,18 +50,32 @@ dataset_dir = sorted(os.listdir(dataset_folder))
 class_names = [x.split('.')[0] for x in dataset_dir]
 # print(class_names)
 # print(class_names[0])
-print(search_in_dict('n02110627', whole_dict))
+print(search_in_dict('n04141076', whole_dict))
+print(search_in_dict('n02104029', whole_dict))
+count = 0
 
 wordnet_list = []
 imagenet_list = []
+# wordnet_list2 = []
+# imagenet_list2 = []
 for class_name in class_names:
     temp = search_in_dict(class_name, whole_dict)
-    wordnet_list.append(temp)
+    if  ('n02103406', 'working dog') in temp:
+        wordnet_list.append(temp)
+        imagenet_list.append(class_name)
+        # count = count + 1
+    if ('n03800933', 'musical instrument, instrument') in temp:
+        wordnet_list.append(temp)
+        imagenet_list.append(class_name)
+    # wordnet_list.append(temp)
     # if temp[1][0] == 'n01317541': # domestic_list
     #     wordnet_list.append(temp)
     #     imagenet_list.append(class_name)
 
-print(wordnet_list)
+print(len(imagenet_list))
+
+
+# print(wordnet_list)
 # print(wordnet_list[101])
 # print(wordnet_list[100])
 # Now we have a domestic list
