@@ -7,7 +7,7 @@ import numpy as np
 Ratio = 0.1          # Ratio of images used
 Fraction = 0.8          # Fraction of training dataset
 
-root = '/gpfs/accounts/eecs542f21_class_root/eecs542f21_class/yuchuw/extract_train_image_tar/'
+root = '/Volumes/Jingyu-SSD/ImageNet/'
 if os.path.isdir(root + 'image/'):
     shutil.rmtree(root + 'image/')
 if os.path.isdir(root + 'train/'):
