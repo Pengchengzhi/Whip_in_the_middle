@@ -2,25 +2,26 @@ import os, sys
 import tarfile
 import shutil
 import numpy as np
+from tqdm import tqdm
 
 #### Initialization
-Ratio = 0.1          # Ratio of images used
+Ratio = 1          # Ratio of images used
 Fraction = 0.8          # Fraction of training dataset
 
 root = '/Volumes/Jingyu-SSD/ImageNet/'
-if os.path.isdir(root + 'image/'):
-    shutil.rmtree(root + 'image/')
-if os.path.isdir(root + 'train/'):
-    shutil.rmtree(root + 'train/')
-if os.path.isdir(root + 'test/'):
-    shutil.rmtree(root + 'test/')
+# if os.path.isdir(root + 'image/'):
+#     shutil.rmtree(root + 'image/')
+# if os.path.isdir(root + 'train/'):
+#     shutil.rmtree(root + 'train/')
+# if os.path.isdir(root + 'test/'):
+#     shutil.rmtree(root + 'test/')
 
 train_folder = root + 'train/'
 test_folder = root + 'test/'
 
-os.mkdir('image')
-os.mkdir('test')
-os.mkdir('train')
+os.mkdir(root+'image')
+os.mkdir(root+'test')
+os.mkdir(root+'train')
 
 #### Untar tar_small
 #tarlist = os.listdir(root + 'tar_small/')
@@ -29,7 +30,7 @@ image_dir = root + 'image/'          # image dir
 
 for tarf in tarlist:
     print(tarf)
-    path = root + 'tar_small/' + str(tarf) +  '.tar'
+    path = root + 'tar_file/' + str(tarf) +  '.tar'
     tf = tarfile.open(path)
 
     inp_path = image_dir + str(tarf) + '/'
@@ -39,7 +40,7 @@ for tarf in tarlist:
 	
 
 #### Extract each class
-for tarf in tarlist:
+for tarf in tqdm(tarlist):
     inp_path = image_dir + str(tarf) + '/'
     imagelist = os.listdir(inp_path) 
 
@@ -51,8 +52,10 @@ for tarf in tarlist:
         if Fraction*L <= i:
             tmp = imagelist[idex[i]]
             img = inp_path + str(tmp)
-            shutil.copy(img, test_folder)
+            os.makedirs(os.path.dirname(test_folder+f'{str(tarf)}/'), exist_ok=True)
+            shutil.copy(img, test_folder+f'{str(tarf)}/')
         else:
             tmp = imagelist[idex[i]]
             img = inp_path + str(tmp)
-            shutil.copy(img, train_folder)
+            os.makedirs(os.path.dirname(train_folder+f'{str(tarf)}/'), exist_ok=True)
+            shutil.copy(img, train_folder+f'{str(tarf)}/')
