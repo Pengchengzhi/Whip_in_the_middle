@@ -42,7 +42,7 @@ train_loader = data.DataLoader(data_train, batch_size = 10, shuffle = True)
 
 data_val = myDataset(data_root, mode = 'val',
                        transform = transforms.Compose([
-                          transforms.Resize([256,256]),
+                           transforms.Resize([256,256]),
                            transforms.CenterCrop(224),
                            transforms.ToTensor(),
                            normalize,
