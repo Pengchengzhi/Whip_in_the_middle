@@ -8,6 +8,6 @@
 * **11.13 (Jingyu):** Build a draft tree structure based on anytree package. Use the `structure_released.xml` to get the wordnet hierarchy for each class in ImageNet. Continue working on the development of tree structure and function. 
 * **11.16 (Chengzhi):** See file `cifar10_train_update_tree.ipynb`. Add weighted MSE loss as the new loss function. Add tree vector update fucntion. Add a ResNet classification model, training and test code, for comparision to our model. However, it's very strange I can't reproduce previous experiment results. I set the parameters into zeros and ones, so theoretically I changed nothing, but now training acc is 50% and testing acc is 27%. On the same dataset, compaire to 11.11, `cifar10_train.ipynb`.
 * **12.8 (Jingyu):** Solved the previous `structure_released.xml` issue and construct the tree for synthetic dataset successfully. Will continue working on initialization of label function.
-* **12.10 (Yuchuw):** Modified the Load_data.py and Extract.py. (1) Now, we have train and val folder containing ~60 classes' folders; (2) Data Augmentation: Crop, Rotation, Flip, Perspective change, and Blur.
+* **12.10 (Yuchuw):** Modified the Load_data.py and Extract.py. (1) Now, we have train and val folder containing ~60 classes' folders; (2) Data Augmentation: Crop, Rotation, Flip, Perspective change, and Blur; (3) Main_baseline_augmentation using our augmentation and dataset.
 
 
