@@ -236,16 +236,12 @@ def main_worker(gpu, ngpus_per_node, args):
 
     val_dataset = myDataset(args.data, mode = 'val',
                        transform = transforms.Compose([
-                          transforms.Resize([256,256]),
-                           transforms.RandomHorizontalFlip(),
-                           transforms.RandomVerticalFlip(),
-                           transforms.RandomRotation(90),                           transforms.RandomPerspective(0.2),
-                           transforms.RandomPerspective(0.2),
-                           transforms.RandomCrop([224, 224]),
-                           transforms.RandomChoice([blur1, blur2, blur3]),
+                           transforms.Resize([256,256]),
+                           transforms.CenterCrop(224),
                            transforms.ToTensor(),
                            normalize,
                        ]))
+
 
     val_loader = torch.utils.data.DataLoader(
         val_dataset, batch_size=args.batch_size, shuffle=False,
