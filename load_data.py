@@ -43,12 +43,7 @@ train_loader = data.DataLoader(data_train, batch_size = 10, shuffle = True)
 data_val = myDataset(data_root, mode = 'val',
                        transform = transforms.Compose([
                           transforms.Resize([256,256]),
-                           transforms.RandomHorizontalFlip(),
-                           transforms.RandomVerticalFlip(),
-                           transforms.RandomRotation(90),
-                           transforms.RandomPerspective(0.2),
-                           transforms.RandomCrop([224, 224]),
-                           transforms.RandomChoice([blur1, blur2, blur3]),
+                           transforms.CenterCrop(224),
                            transforms.ToTensor(),
                            normalize,
                        ]))
