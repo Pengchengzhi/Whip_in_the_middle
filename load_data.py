@@ -17,7 +17,7 @@ from torch.utils import data
 import torchvision.transforms as transforms
 import numpy as np
 
-data_root = './'          # Working directory
+data_root = './'          # Working directory, containing /train and /val
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])          # Nomalizaion
 
@@ -80,6 +80,11 @@ class Imgnet_Dataset(data.Dataset):
         self.transform = transform
         self.trainpath = glob.glob(root + 'train/*/*.JPEG')
         self.valpath = glob.glob(root + 'val/*/*.JPEG')
+        
+        tarlist = np.load('interested_class_in.npy', allow_pickle=True)
+        self.dict = {}
+        for i in range(len(tarlist)):
+            self.dict[tarlist[i]] = i
 
         self.path = []
         if mode == 'train':
@@ -99,7 +104,8 @@ class Imgnet_Dataset(data.Dataset):
     #### Get input img and its label
     def __getitem__(self, index):
         mypath = self.path[index]
-        label = mypath.split('_')[0].split('\\')[1]
+        #label = mypath.split('_')[-2].split('\\')[-1]
+        label = mypath.split('_')[-2].split('/')[-1]
         img = self.loader(mypath)
         if self.transform is not None:
             img = self.transform(img)
@@ -116,7 +122,7 @@ class Imgnet_Dataset(data.Dataset):
         #img = img / 255          # Normalization
         #img = torch.FloatTensor(np.transpose(img, (2,0,1)))          # 3*size*size
         
-        return img, label
+        return img, self.dict[label]
         
     def __len__(self):
         return len(self.path)
