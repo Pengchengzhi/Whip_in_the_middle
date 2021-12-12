@@ -10,6 +10,9 @@ from anytree import search, LevelOrderGroupIter, walker
 import cvxpy as cp
 from numpy.lib.function_base import append
 from uniform_sampling import uniform_hypersphere
+import sys
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 
@@ -29,7 +32,6 @@ class TreeClass(NodeMixin):  # Add Node feature
         self.vector = None # unit vector of pointing direction
         self.dim_N = dim_N # dim of the feature vector
 
-
 # my0 = MyClass('my0', 3, 4)
 # my1 = MyClass('my1', 1, 0, parent=my0)
 # my2 = MyClass('my2', 0, 2, parent=my0)
@@ -47,6 +49,71 @@ def print_tree(tree):
     for pre, fill, node in RenderTree(tree):
         treestr = u"%s%s %s" % (pre, node.name, node.in_id)
         print(treestr.ljust(8), node.length, node.vector.reshape(node.dim_N))
+
+def get_similar_nodes(leaf_nodes, search_node):
+    parent_label = search_node.ancestors[-1].name
+    search_name = search_node.name
+    similar_nodes = []
+    for node in leaf_nodes:
+        if node.ancestors[-1].name == parent_label and node.name != search_name:
+            similar_nodes.append(node)
+    return similar_nodes
+
+def find_closest_idx(hypersphere, search_node):
+    search_space = [(i, point) for i, point in enumerate(hypersphere)]
+    closest_dist = sys.float_info.max
+    closest_idx = -1
+    for i, point in search_space:
+        dist = np.linalg.norm(np.array(point)-np.array(search_node.vector))
+        if dist < closest_dist:
+            closest_idx = i
+            closest_dist = dist
+
+    return closest_idx
+
+def get_leaf_dict(tree, id_list):
+    leaf_nodes = []
+    for children in LevelOrderGroupIter(tree):
+        for node in children:
+            if node.is_leaf:
+                leaf_nodes.append(node)
+    label_dict = {}
+    for node in leaf_nodes:
+        label_dict[node.name] = node.vector
+    return label_dict
+
+
+def hypersphere_init_label(tree: TreeClass):
+    # Get leaf nodes from tree
+    leaf_nodes = []
+    for children in LevelOrderGroupIter(tree):
+        for node in children:
+            if node.is_leaf:
+                leaf_nodes.append(node)
+
+    # Arbitrary point initialization on hypersphere
+    hypersphere = uniform_hypersphere(tree.dim_N, len(leaf_nodes))
+    # all_points = hypersphere
+    for i, node in enumerate(leaf_nodes):
+        node.vector = hypersphere[i]
+
+    # Assign similar nodes to similar areas on hypersphere
+    while len(leaf_nodes) != 0:
+        # Take arbitrary node
+        search_node = leaf_nodes.pop()
+        # Assign node value on hypersphere
+        search_node.vector = np.array(hypersphere.pop())
+        # Find similar nodes 
+        similar_nodes = get_similar_nodes(leaf_nodes, search_node)
+        # For each similar node,
+        for node in similar_nodes:
+            # Find closest index and assign to similar node
+            closest_idx = find_closest_idx(hypersphere, search_node)
+            node.vector = np.array(hypersphere[closest_idx])
+            hypersphere.pop(closest_idx)
+            leaf_nodes.remove(node)
+        
+    
 
 def tree_init_label(tree: TreeClass, length_list=[10,5,4,3,2,2,2,1,1]):
     # put all nodes in a list so we can do further processing
@@ -83,8 +150,7 @@ def tree_init_label(tree: TreeClass, length_list=[10,5,4,3,2,2,2,1,1]):
                     #TODO: reject dot product > 0.5?
                     for j in range(len(node.children)):
                         node.children[j].vector = vectors[j,:]
-                    
-                
+
 
 def get_label_dict(tree, id_list):
     label_dict = {}
@@ -144,7 +210,7 @@ def get_label_dict(tree, id_list):
 # for i in range(len(wordnet_list)):
 #     if type(wordnet_list[-1]) != tuple
 
-def build_tree(dim_N = 3,length_list=[10,5,4,3,2,2,2,1,1]):
+def build_tree(dim_N = 3,length_list=[10,5,4,3,2,2,2,1,1], brocolli_flag=True):
     length_list = [10,5,4,3,2,2,2,1,1] # for current dataset
     imagenet_list = np.load("interested_class_in.npy", allow_pickle=True)
     wordnet_list = np.load("interested_class_wn.npy", allow_pickle=True)
@@ -185,12 +251,48 @@ def build_tree(dim_N = 3,length_list=[10,5,4,3,2,2,2,1,1]):
             #     continue
             # current_parent = search.findall(my0, filter_=lambda node: node.name in (query_class))[0]
 
-    tree_init_label(tree,length_list=length_list)
-    label_dict = get_label_dict(tree,imagenet_list)
+    if brocolli_flag:
+        tree_init_label(tree,length_list=length_list)
+        label_dict = get_label_dict(tree,imagenet_list)
+    else:
+        hypersphere_init_label(tree)
+        label_dict = get_leaf_dict(tree, imagenet_list)
 
 
     return label_dict
 
-print(build_tree(dim_N=10))
-# print(search.findall(my0, filter_=lambda node: node.name in ('my3')))
 
+label_dict = build_tree(dim_N=3, brocolli_flag=False)
+print(label_dict)
+# leaf_nodes = []
+# for children in LevelOrderGroupIter(tree):
+#     for node in children:
+#         if node.is_leaf:
+#             leaf_nodes.append(node)
+
+# x_data, y_data, z_data, category = [], [], [], []
+
+# for node in leaf_nodes:
+#     x_data.append(node.vector[0])
+#     y_data.append(node.vector[1])
+#     z_data.append(node.vector[2])
+#     category.append(node.ancestors[-1].name)
+
+# color_map = {}
+# i = 0
+# for cat in category:
+#     if cat not in color_map:
+#         color_map[cat] = i
+#         i += 1
+
+# color_list = []
+# for cat in category:
+#     color_list.append(color_map[cat])
+
+# fig = plt.figure()
+# # ax = fig.add_subplot(111, projection='3d')
+# ax = plt.axes(projection='3d')
+# ax.scatter(x_data, y_data, z_data, c=color_list)
+# plt.show()
+# print('hi')
+# print(search.findall(my0, filter_=lambda node: node.name in ('my3')))
