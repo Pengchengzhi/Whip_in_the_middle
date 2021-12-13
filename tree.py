@@ -134,7 +134,7 @@ def tree_init_label(tree: TreeClass, length_list=[10,5,4,3,2,2,2,1,1]):
         level_group[0][0].children[1].vector = -level_group[0][0].children[0].vector
     
     # inilialize label and node for each other
-    length_list = [10,5,4,3,2,2,2,1,1]
+    # length_list = [10,5,4,3,2,2,2,1,1]
     for i in np.arange(1,max_level-1):
         query_list = level_group[i]
         for node in query_list:
@@ -211,17 +211,17 @@ def get_label_dict(tree, id_list):
 #     if type(wordnet_list[-1]) != tuple
 
 def build_tree(dim_N = 3,length_list=[10,5,4,3,2,2,2,1,1], brocolli_flag=True):
-    length_list = [10,5,4,3,2,2,2,1,1] # for current dataset
+    # length_list = [10,5,4,3,2,2,2,1,1] # for current dataset
     imagenet_list = np.load("interested_class_in.npy", allow_pickle=True)
     wordnet_list = np.load("interested_class_wn.npy", allow_pickle=True)
-    dim_N = dim_N
+    #dim_N = dim_N
     current_node = None
     current_idx = None
     last_node = None
 
     
     # starting from head to final level
-    length_list = length_list
+    # length_list = length_list
 
     tree = TreeClass('head',dim_N=dim_N)
     tree.vector = np.zeros(tree.dim_N) # inilialize the data for tree
