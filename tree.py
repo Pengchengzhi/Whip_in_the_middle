@@ -263,7 +263,7 @@ def build_tree(dim_N = 3,length_list=[10,5,4,3,2,2,2,1,1], brocolli_flag=True):
 
 
 label_dict = build_tree(dim_N=3, brocolli_flag=False)
-print(label_dict)
+# print(label_dict)
 # leaf_nodes = []
 # for children in LevelOrderGroupIter(tree):
 #     for node in children:
