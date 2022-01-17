@@ -15,6 +15,4 @@
 * **12.12 (Mattonn):** Initialize labels to be uniformly distributed across a hypersphere. To use this label initialization, call build_tree with the flag brocolli_flag=False. This will return a dictionary of labels mapped to their vector representations.
 * **12.12 (Chengzhi):** The training loss for the first round was 11. Then in the following iterations, it keeps at around 4. The sudden drop was solved by tweaking `hidden_dim`. Then I plotted the label vector for dim=2, found that label vectors are overlapping. So I spent the whole day tweaking `hidden_dim` and `length_list`. Also tried different data augmentation, whether to use mask for calculating the loss (if predicted as the correct class, then does not count its MSE loss), and learning rate. The training code runs very slow, takes 80 minutes to train for 20 iterations. In the end, the training loss drops smoothly, but the prediction accuracy on the train set keeps struggling at 1.5% - 2%. All the experiment is based on the initial broccoli-like label vector generator.
 
-## Experiments
-1. ResNet18, pretrained, sphere label, hidden_dim=25,
 
